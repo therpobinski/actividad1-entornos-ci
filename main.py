@@ -20,6 +20,14 @@ def sort_list(items, ascending=True):
 def remove_duplicates_from_list(items):
     return list(set(items))
 
+def rename_file(old_name, new_name):
+    try:
+        os.rename(old_name, new_name)
+        print(f"Archivo renombrado exitosamente a: {new_name}")
+    except FileNotFoundError:
+        print(f"Error: El archivo {old_name} no existe para ser renombrado.")
+    except Exception as e:
+        print(f"Ocurrió un error al renombrar: {e}")
 
 if __name__ == "__main__":
     filename = DEFAULT_FILENAME
@@ -47,3 +55,7 @@ if __name__ == "__main__":
         word_list = remove_duplicates_from_list(word_list)
 
     print(sort_list(word_list))
+	confirm = input("¿Deseas renombrar el archivo original? (s/n): ").lower()
+    if confirm == "s":
+        nuevo_nombre = input("Introduce el nuevo nombre (ejemplo: 'procesado.txt'): ")
+        rename_file(filename, nuevo_nombre)
