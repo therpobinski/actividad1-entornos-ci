@@ -8,6 +8,7 @@ import sys
 
 DEFAULT_FILENAME = "words.txt"
 DEFAULT_DUPLICATES = False
+DEFAULT_ASCENDING = True
 
 
 def sort_list(items, ascending=True):
@@ -32,12 +33,22 @@ def rename_file(old_name, new_name):
 if __name__ == "__main__":
     filename = DEFAULT_FILENAME
     remove_duplicates = DEFAULT_DUPLICATES
-    if len(sys.argv) == 3:
+    ascending = DEFAULT_ASCENDING
+
+    if len(sys.argv) == 4:
         filename = sys.argv[1]
         remove_duplicates = sys.argv[2].lower() == "yes"
+
+        order = sys.argv[3].lower()
+        if order not in ("asc", "desc"):
+            print("El tercer argumento debe ser 'asc' o 'desc'")
+            sys.exit(1)
+
+        ascending = order == "asc"
     else:
         print("You must specify the file as the first argument")
         print("The second argument indicates if duplicates should be removed")
+        print("El tercer argumento indica si el orden será 'asc' o 'desc'")
         sys.exit(1)
 
     print(f"Reading words from file {filename}")
@@ -54,7 +65,7 @@ if __name__ == "__main__":
     if remove_duplicates:
         word_list = remove_duplicates_from_list(word_list)
 
-    print(sort_list(word_list))
+  print(sort_list(word_list, ascending))
 	confirm = input("¿Deseas renombrar el archivo original? (s/n): ").lower()
     if confirm == "s":
         nuevo_nombre = input("Introduce el nuevo nombre (ejemplo: 'procesado.txt'): ")
