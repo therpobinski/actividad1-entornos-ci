@@ -13,7 +13,7 @@ DEFAULT_ASCENDING = True
 
 def sort_list(items, ascending=True):
     if not isinstance(items, list):
-        raise RuntimeError(f"No puede ordenar {type(items)}")
+        raise RuntimeError(f"Cannot sort {type(items)}")
 
     return sorted(items, reverse=(not ascending))
 
@@ -21,6 +21,14 @@ def sort_list(items, ascending=True):
 def remove_duplicates_from_list(items):
     return list(set(items))
 
+def rename_file(old_name, new_name):
+    try:
+        os.rename(old_name, new_name)
+        print(f"Archivo renombrado exitosamente a: {new_name}")
+    except FileNotFoundError:
+        print(f"Error: El archivo {old_name} no existe para ser renombrado.")
+    except Exception as e:
+        print(f"Ocurrió un error al renombrar: {e}")
 
 if __name__ == "__main__":
     filename = DEFAULT_FILENAME
@@ -38,12 +46,12 @@ if __name__ == "__main__":
 
         ascending = order == "asc"
     else:
-        print("Se debe indicar el fichero como primer argumento")
-        print("El segundo argumento indica si se quieren eliminar duplicados")
+        print("You must specify the file as the first argument")
+        print("The second argument indicates if duplicates should be removed")
         print("El tercer argumento indica si el orden será 'asc' o 'desc'")
         sys.exit(1)
 
-    print(f"Se leerán las palabras del fichero {filename}")
+    print(f"Reading words from file {filename}")
     file_path = os.path.join(".", filename)
     if os.path.isfile(file_path):
         word_list = []
@@ -51,10 +59,14 @@ if __name__ == "__main__":
             for line in file:
                 word_list.append(line.strip())
     else:
-        print(f"El fichero {filename} no existe")
+        print(f"The file {filename} does not exist")
         word_list = ["ravenclaw", "gryffindor", "slytherin", "hufflepuff"]
 
     if remove_duplicates:
         word_list = remove_duplicates_from_list(word_list)
 
-    print(sort_list(word_list, ascending))
+  print(sort_list(word_list, ascending))
+	confirm = input("¿Deseas renombrar el archivo original? (s/n): ").lower()
+    if confirm == "s":
+        nuevo_nombre = input("Introduce el nuevo nombre (ejemplo: 'procesado.txt'): ")
+        rename_file(filename, nuevo_nombre)
